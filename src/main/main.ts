@@ -162,7 +162,19 @@ app.on('window-all-closed', () => {
 })
 
 app.whenReady()
-    .then(() => {
+    .then(async () => {
+        /**
+         * Put React Developer Tools extension to "extensions" folder at root directory
+         * I don't really care about it so here is just a try catch block for it.
+         * 
+         * Keep in mind that latest version of React-Dev-Tools doesnt work with electron.
+         * I had to use version 4.25.0
+         */
+        try {
+            await session.defaultSession.loadExtension(path.join(__dirname, '../../extensions/fmkadmapgofadopljbjfkapdkoienihi'));
+        } catch {
+            console.log("Failed to load React-Dev-Tools")
+        }
         createWindow()
         app.on('activate', () => {
             // On macOS it's common to re-create a window in the app when the

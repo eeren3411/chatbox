@@ -113,11 +113,14 @@ export default function Message(props: Props) {
         content += '...'
     }
 
-    const thinkFinder = /<thinking>(.*?)<\/thinking>/s;
-    const thinkMatches = content.match(thinkFinder);
-
-    let thinkingPart = thinkMatches?.[1].trim() || '';
-    content = content.replace(thinkMatches?.[0] || '', '').trim();
+    let thinkingPart = ''
+    if (msg.role === 'assistant') {
+        const thinkMatches = content.match(/<thinking>(.*?)<\/thinking>/s)
+        if (thinkMatches) {
+            thinkingPart = thinkMatches[1].trim()
+            content = content.replace(thinkMatches[0], '').trim()
+        }
+    }
 
     if (needCollapse && isCollapsed) {
         content = msg.content.slice(0, collapseThreshold) + '... '
